@@ -1,3 +1,9 @@
+# swapiapp
+
+Front-end client for the SWAPI https://swapi.dev
+
+Displays species references in the Star Wars Universe
+
 This project was bootstrapped with
 [Create React App](https://github.com/facebook/create-react-app).
 
