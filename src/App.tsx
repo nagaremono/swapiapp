@@ -4,6 +4,7 @@ import { AppHeader } from './components/AppHeader';
 import { customTheme } from './theme/customTheme';
 import './main.css';
 import { Welcome } from './components/Welcome';
+import { SpeciesList } from './components/SpeciesList';
 
 export const App = () => (
   <ChakraProvider theme={customTheme}>
@@ -11,6 +12,7 @@ export const App = () => (
     <AppHeader />
     <Container>
       <Welcome />
+      <SpeciesList />
     </Container>
   </ChakraProvider>
 );
