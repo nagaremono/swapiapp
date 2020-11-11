@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { ChakraProvider, CSSReset } from '@chakra-ui/core';
-import theme from '@chakra-ui/theme';
+import { AppHeader } from './components/AppHeader';
+import { customTheme } from './theme/customTheme';
+import './main.css';
 
 export const App = () => (
-  <ChakraProvider theme={theme}>
+  <ChakraProvider theme={customTheme}>
     <CSSReset />
-    <div>Hello World</div>
+    <AppHeader />
   </ChakraProvider>
 );
