@@ -1,4 +1,4 @@
-import { Flex, IconButton, Text } from '@chakra-ui/core';
+import { Flex, Link, Text } from '@chakra-ui/core';
 import React from 'react';
 import { GitHubIcon } from './GitHubIcon';
 
@@ -19,12 +19,9 @@ export const AppHeader: React.FC = () => {
       >
         Species in Star Wars
       </Text>
-      <IconButton
-        mx={4}
-        size="sm"
-        aria-label="Repository Link"
-        icon={<GitHubIcon boxSize={7} />}
-      />
+      <Link mx={4} href="https://github.com/nagaremono/swapiapp" isExternal>
+        <GitHubIcon boxSize={8} color="#fff" _hover={{ color: 'grey' }} />
+      </Link>
     </Flex>
   );
 };
