@@ -11,13 +11,15 @@ import { ArrowRightIcon } from '@chakra-ui/icons';
 import React from 'react';
 import { Waypoint } from 'react-waypoint';
 import { useFetchSWAPI } from '../utils/useFetchSWAPI';
+import { LoadIndicator } from './LoadIndicator';
 
 export const SpeciesList = () => {
-  const [data, fetchMore] = useFetchSWAPI('species');
+  const { data, fetchMore, isLoading } = useFetchSWAPI('species');
 
   return (
     <Box>
       <Heading fontSize="3xl">Species List</Heading>
+      {isLoading && <LoadIndicator />}
       <VStack spacing={6}>
         {data?.results &&
           data.results?.map((species, index, arr) => {
@@ -49,6 +51,7 @@ export const SpeciesList = () => {
               </SimpleGrid>
             );
           })}
+        {isLoading && <LoadIndicator />}
       </VStack>
     </Box>
   );

@@ -11,10 +11,15 @@ type SWResource =
   | 'vehicles'
   | 'planets';
 
-export const useFetchSWAPI = (
-  resource: SWResource
-): [SpeciesResponse | null, () => Promise<void>] => {
+interface StateMethod {
+  data: SpeciesResponse | null;
+  fetchMore: () => Promise<void>;
+  isLoading: boolean;
+}
+
+export const useFetchSWAPI = (resource: SWResource): StateMethod => {
   const [data, setData] = useState<SpeciesResponse | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const isMounted = useRef(true);
 
   async function getData(url: string) {
@@ -23,12 +28,14 @@ export const useFetchSWAPI = (
 
   async function fetchMore(): Promise<void> {
     if (data?.next) {
+      setIsLoading(true);
       const nextPage = await getData(data.next);
 
       setData({
         ...nextPage.data,
         results: [...data.results, ...nextPage.data.results],
       });
+      setIsLoading(false);
     }
   }
 
@@ -43,11 +50,12 @@ export const useFetchSWAPI = (
       const response = await getData(`${BASE_API_URL}/${resource}`);
       if (isMounted.current) {
         setData(response.data);
+        setIsLoading(false);
       }
     }
 
     Species();
   }, [resource]);
 
-  return [data, fetchMore];
+  return { data, fetchMore, isLoading };
 };
