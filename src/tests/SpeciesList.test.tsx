@@ -48,4 +48,12 @@ describe('SpeciesList: ', () => {
 
     expect(screen.queryByText(randomName)).not.toBeInTheDocument();
   });
+
+  test('displays detailed info', async () => {
+    const elements = await screen.findAllByText(
+      /\bhair|\beye|\bskin|\bheight|\blifespan|\blanguage/gi
+    );
+
+    expect(elements).toBeTruthy();
+  });
 });

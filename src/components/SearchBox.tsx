@@ -18,7 +18,7 @@ export const SearchBox: React.FC<SearchBoxProps> = ({ onSubmit }) => {
   });
   return (
     <form onSubmit={formik.handleSubmit}>
-      <HStack>
+      <HStack spacing={4} mx="auto" w={4 / 5}>
         <Input
           placeholder="Search here..."
           name="searchTerm"
