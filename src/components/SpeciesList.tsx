@@ -50,7 +50,7 @@ export const SpeciesList = () => {
             );
           })}
         {isLoading && <LoadIndicator />}
-        <Flex fontSize="lg">End of the list</Flex>
+        {!data?.next && <Flex fontSize="lg">End of the list</Flex>}
       </VStack>
     </Box>
   );
