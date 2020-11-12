@@ -33,7 +33,7 @@ const DetailItem: React.FC<DetailItemProps> = ({ label, content }) => {
         {label}
       </Text>{' '}
       {content.split(', ').map((c, i) => (
-        <Tag mr={2} key={i}>
+        <Tag size="md" layerStyle="tags" mr={2} key={i}>
           {c}
         </Tag>
       ))}
@@ -57,10 +57,15 @@ export const SpeciesListItem: React.FC<ListItemProps> = ({
         {species.name}
       </Heading>
       <HStack justifySelf="end">
-        <Badge>{species.classification}</Badge>
-        <Badge>{species.designation}</Badge>
+        <Badge layerStyle="tags">{species.classification}</Badge>
+        <Badge layerStyle="tags">{species.designation}</Badge>
       </HStack>
-      <Accordion gridRow="3" gridColumn="1 / -1" allowToggle>
+      <Accordion
+        layerStyle="custBorder"
+        gridRow="3"
+        gridColumn="1 / -1"
+        allowToggle
+      >
         <AccordionItem>
           <AccordionButton height={8}>
             <Box flex="1" textAlign="left">
@@ -69,14 +74,14 @@ export const SpeciesListItem: React.FC<ListItemProps> = ({
             <AccordionIcon />
           </AccordionButton>
           <AccordionPanel>
-            <List>
+            <List spacing={2}>
               <DetailItem
                 label="Avg. Height: "
-                content={species.average_height}
+                content={species.average_height + ' cm'}
               />
               <DetailItem
                 label="Avg. Lifespan: "
-                content={species.average_lifespan}
+                content={species.average_lifespan + ' years'}
               />
               <DetailItem label="Language: " content={species.language} />
               <DetailItem label="Hair Colors: " content={species.hair_colors} />

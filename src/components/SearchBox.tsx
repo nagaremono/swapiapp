@@ -18,15 +18,21 @@ export const SearchBox: React.FC<SearchBoxProps> = ({ onSubmit }) => {
   });
   return (
     <form onSubmit={formik.handleSubmit}>
-      <HStack spacing={4} mx="auto" w={4 / 5}>
+      <HStack spacing={6} mx="auto" w={4 / 5}>
         <Input
           placeholder="Search here..."
           name="searchTerm"
           type="em"
           onChange={formik.handleChange}
           value={formik.values.searchTerm}
+          layerStyle="custBorder"
         />
-        <Button isLoading={formik.isSubmitting} type="submit">
+        <Button
+          _hover={{ backgroundColor: 'main.white', color: 'main.primary' }}
+          layerStyle="tags"
+          isLoading={formik.isSubmitting}
+          type="submit"
+        >
           Submit
         </Button>
       </HStack>

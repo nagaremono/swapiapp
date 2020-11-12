@@ -3,14 +3,23 @@ import { extendTheme } from '@chakra-ui/core';
 export const customTheme = extendTheme({
   colors: {
     main: {
-      primary: '#303035',
-      secondary: '#829399',
-      yellow: '#eef36a',
-      pink: '#E8998D',
-      brown: '#A1683A',
+      primary: '#22223b',
+      secondary: '#4a4e69',
+      line1: '#9a8c98',
+      line2: '#c9ada7',
+      white: '#f2e9e4',
     },
   },
   fonts: {
     header: 'Bree Serif, serif',
+  },
+  layerStyles: {
+    tags: {
+      bg: 'main.secondary',
+      color: 'main.white',
+    },
+    custBorder: {
+      borderColor: 'main.line2',
+    },
   },
 });

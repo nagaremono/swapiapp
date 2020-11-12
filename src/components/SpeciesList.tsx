@@ -31,26 +31,30 @@ export const SpeciesList = () => {
 
   return (
     <Box>
-      <Heading fontSize="3xl">Species List</Heading>
+      <Heading fontSize="3xl" mb={6}>
+        Species List
+      </Heading>
       <SearchBox onSubmit={search} />
-      <VStack spacing={6}>
+      <VStack my={6} spacing={6}>
         {message || null}
         {data?.results &&
-          data.results?.map((species, index, arr) => {
-            return (
-              <SpeciesListItem key={species.name} species={species}>
-                {index === arr.length - 3 && (
-                  <Waypoint
-                    onEnter={() => {
-                      fetchMore();
-                    }}
-                  />
-                )}
-              </SpeciesListItem>
-            );
-          })}
+          data.results?.map((species, index, arr) => (
+            <SpeciesListItem key={species.name} species={species}>
+              {index === arr.length - 3 && (
+                <Waypoint
+                  onEnter={() => {
+                    fetchMore();
+                  }}
+                />
+              )}
+            </SpeciesListItem>
+          ))}
         {isLoading && <LoadIndicator />}
-        {!data?.next && <Flex fontSize="lg">End of the list</Flex>}
+        {!data?.next && (
+          <Flex color="main.white" fontSize="lg">
+            End of the list
+          </Flex>
+        )}
       </VStack>
     </Box>
   );
