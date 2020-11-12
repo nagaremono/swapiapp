@@ -8,47 +8,12 @@ import {
   SimpleGrid,
 } from '@chakra-ui/core';
 import { ArrowRightIcon } from '@chakra-ui/icons';
-import Axios from 'axios';
-import React, { useEffect, useState, useRef } from 'react';
+import React from 'react';
 import { Waypoint } from 'react-waypoint';
-import { BASE_API_URL } from '../constants';
-import { SpeciesResponse } from '../types/SpeciesResponse';
+import { useFetchSWAPI } from '../utils/useFetchSWAPI';
 
 export const SpeciesList = () => {
-  const [data, setData] = useState<SpeciesResponse | null>(null);
-  const isMounted = useRef(true);
-
-  async function getData(url: string) {
-    return Axios.get(url);
-  }
-
-  async function fetchMore() {
-    if (data?.next) {
-      const nextPage = await getData(data.next);
-
-      setData({
-        ...nextPage.data,
-        results: [...data.results, ...nextPage.data.results],
-      });
-    }
-  }
-
-  useEffect(() => {
-    return () => {
-      isMounted.current = false;
-    };
-  });
-
-  useEffect(() => {
-    async function Species() {
-      const response = await getData(`${BASE_API_URL}/species`);
-      if (isMounted.current) {
-        setData(response.data);
-      }
-    }
-
-    Species();
-  }, []);
+  const [data, fetchMore] = useFetchSWAPI('species');
 
   return (
     <Box>
