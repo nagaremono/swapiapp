@@ -15,6 +15,7 @@ interface StateMethod {
   data: SpeciesResponse | null;
   fetchMore: () => Promise<void>;
   isLoading: boolean;
+  search: (string: string) => Promise<void>;
 }
 
 export const useFetchSWAPI = (resource: SWResource): StateMethod => {
@@ -26,8 +27,20 @@ export const useFetchSWAPI = (resource: SWResource): StateMethod => {
     return Axios.get(url);
   }
 
+  async function search(string: string) {
+    if (isMounted) {
+      setIsLoading(true);
+      const result = await getData(
+        `${BASE_API_URL}/${resource}/?search=${string}`
+      );
+
+      setIsLoading(false);
+      setData(result.data);
+    }
+  }
+
   async function fetchMore(): Promise<void> {
-    if (data?.next) {
+    if (data?.next && isMounted) {
       setIsLoading(true);
       const nextPage = await getData(data.next);
 
@@ -57,5 +70,5 @@ export const useFetchSWAPI = (resource: SWResource): StateMethod => {
     Species();
   }, [resource]);
 
-  return { data, fetchMore, isLoading };
+  return { data, fetchMore, isLoading, search };
 };

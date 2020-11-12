@@ -12,14 +12,15 @@ import React from 'react';
 import { Waypoint } from 'react-waypoint';
 import { useFetchSWAPI } from '../utils/useFetchSWAPI';
 import { LoadIndicator } from './LoadIndicator';
+import { SearchBox } from './SearchBox';
 
 export const SpeciesList = () => {
-  const { data, fetchMore, isLoading } = useFetchSWAPI('species');
+  const { data, fetchMore, isLoading, search } = useFetchSWAPI('species');
 
   return (
     <Box>
       <Heading fontSize="3xl">Species List</Heading>
-      {isLoading && <LoadIndicator />}
+      <SearchBox onSubmit={search} />
       <VStack spacing={6}>
         {data?.results &&
           data.results?.map((species, index, arr) => {
