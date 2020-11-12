@@ -16,11 +16,19 @@ interface StateMethod {
   fetchMore: () => Promise<void>;
   isLoading: boolean;
   search: (string: string) => Promise<void>;
+  error: ErrorObject | null;
+}
+
+interface ErrorObject {
+  name: string;
+  message: string;
 }
 
 export const useFetchSWAPI = (resource: SWResource): StateMethod => {
   const [data, setData] = useState<SpeciesResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<ErrorObject | null>(null);
+
   const isMounted = useRef(true);
 
   async function getData(url: string) {
@@ -28,26 +36,36 @@ export const useFetchSWAPI = (resource: SWResource): StateMethod => {
   }
 
   async function search(string: string) {
-    if (isMounted) {
-      setIsLoading(true);
-      const result = await getData(
-        `${BASE_API_URL}/${resource}/?search=${string}`
-      );
+    try {
+      if (isMounted) {
+        setIsLoading(true);
+        const result = await getData(
+          `${BASE_API_URL}/${resource}/?search=${string}`
+        );
 
+        setData(result.data);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      setError({ name: error.name, message: error.message });
       setIsLoading(false);
-      setData(result.data);
     }
   }
 
   async function fetchMore(): Promise<void> {
-    if (data?.next && isMounted) {
-      setIsLoading(true);
-      const nextPage = await getData(data.next);
+    try {
+      if (data?.next && isMounted) {
+        setIsLoading(true);
+        const nextPage = await getData(data.next);
 
-      setData({
-        ...nextPage.data,
-        results: [...data.results, ...nextPage.data.results],
-      });
+        setData({
+          ...nextPage.data,
+          results: [...data.results, ...nextPage.data.results],
+        });
+        setIsLoading(false);
+      }
+    } catch (error) {
+      setError({ name: error.name, message: error.message });
       setIsLoading(false);
     }
   }
@@ -59,16 +77,21 @@ export const useFetchSWAPI = (resource: SWResource): StateMethod => {
   });
 
   useEffect(() => {
-    async function Species() {
-      const response = await getData(`${BASE_API_URL}/${resource}`);
-      if (isMounted.current) {
-        setData(response.data);
+    async function getSpecies() {
+      try {
+        const response = await getData(`${BASE_API_URL}/${resource}`);
+        if (isMounted.current) {
+          setData(response.data);
+          setIsLoading(false);
+        }
+      } catch (error) {
+        setError({ name: error.name, message: error.message });
         setIsLoading(false);
       }
     }
 
-    Species();
+    getSpecies();
   }, [resource]);
 
-  return { data, fetchMore, isLoading, search };
+  return { data, fetchMore, isLoading, search, error };
 };
