@@ -1,7 +1,7 @@
 import Axios from 'axios';
 import { useState, useRef, useEffect } from 'react';
 import { BASE_API_URL } from '../constants';
-import { SpeciesResponse } from '../types/SpeciesResponse';
+import { ApiResponse } from '../types/ApiResponse';
 
 type SWResource =
   | 'species'
@@ -12,7 +12,7 @@ type SWResource =
   | 'planets';
 
 interface StateMethod {
-  data: SpeciesResponse;
+  data: ApiResponse;
   fetchMore: () => Promise<void>;
   isLoading: boolean;
   search: (string: string) => Promise<void>;
@@ -25,7 +25,7 @@ interface ErrorObject {
 }
 
 export const useFetchSWAPI = (resource: SWResource): StateMethod => {
-  const [data, setData] = useState<SpeciesResponse>({
+  const [data, setData] = useState<ApiResponse>({
     count: 0,
     next: null,
     previous: null,
@@ -36,7 +36,7 @@ export const useFetchSWAPI = (resource: SWResource): StateMethod => {
 
   const isMounted = useRef(true);
 
-  const withData = (url: any, cb: (resObj: SpeciesResponse) => void) => {
+  const withData = (url: any, cb: (resObj: ApiResponse) => void) => {
     return async () => {
       try {
         if (url) {

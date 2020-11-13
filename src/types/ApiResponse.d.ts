@@ -3,7 +3,7 @@ import { Species } from './species';
 /**
  * Response object from https://swapi.dev/species
  */
-export interface SpeciesResponse {
+export interface ApiResponse {
   /**
    * Total known species
    */
