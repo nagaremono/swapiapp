@@ -9,42 +9,30 @@ describe('SpeciesList: ', () => {
 
   afterEach(() => cleanup());
 
-  test('gets rendered', () => {
-    expect(screen.getByText(/Species List/i)).toBeInTheDocument();
-  });
-
-  test('displays species minimal info', async () => {
-    const { name, designation, classification } = speciesResponse.results[0];
-
-    expect(await screen.findByText(name)).toBeInTheDocument();
-    expect(await screen.findByText(designation)).toBeInTheDocument();
-    expect(await screen.findByText(classification)).toBeInTheDocument();
-  });
-
   test('displays search result', async () => {
     const { name } = speciesResponse.results[0];
 
-    await waitFor(() => {
-      fireEvent.change(screen.getByPlaceholderText(/Search/i), {
-        target: { value: name },
-      });
-
-      fireEvent.click(screen.getByRole('button'));
+    fireEvent.change(screen.getByPlaceholderText(/Search/i), {
+      target: { value: name },
     });
 
-    expect(await screen.findByText(name)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button'));
+
+    await waitFor(() => screen.getByText(name));
+
+    expect(screen.getByText(name)).toBeInTheDocument();
   });
 
   test('does not display nonexisting species', async () => {
     const randomName = 'non existing species name';
 
-    await waitFor(() => {
-      fireEvent.change(screen.getByPlaceholderText(/Search/i), {
-        target: { value: randomName },
-      });
-
-      fireEvent.click(screen.getByRole('button'));
+    fireEvent.change(screen.getByPlaceholderText(/Search/i), {
+      target: { value: randomName },
     });
+
+    fireEvent.click(screen.getByRole('button'));
+
+    await waitFor(() => screen.queryByText(randomName));
 
     expect(screen.queryByText(randomName)).not.toBeInTheDocument();
   });

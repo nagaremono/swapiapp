@@ -20,7 +20,7 @@ export const SpeciesList = () => {
         {error?.message}
       </Alert>
     );
-  } else if (data?.results?.length === 0) {
+  } else if (data.results?.length === 0) {
     message = (
       <Alert status="warning">
         <AlertIcon />
@@ -37,7 +37,7 @@ export const SpeciesList = () => {
       <SearchBox onSubmit={search} />
       <VStack my={6} spacing={6}>
         {message || null}
-        {data?.results &&
+        {data.results &&
           data.results?.map((species, index, arr) => (
             <SpeciesListItem key={species.name} species={species}>
               {index === arr.length - 3 && (
@@ -50,7 +50,7 @@ export const SpeciesList = () => {
             </SpeciesListItem>
           ))}
         {isLoading && <LoadIndicator />}
-        {!data?.next && (
+        {!data.next && !isLoading && (
           <Flex color="main.white" fontSize="lg">
             End of the list
           </Flex>

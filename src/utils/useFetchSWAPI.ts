@@ -12,7 +12,7 @@ type SWResource =
   | 'planets';
 
 interface StateMethod {
-  data: SpeciesResponse | null;
+  data: SpeciesResponse;
   fetchMore: () => Promise<void>;
   isLoading: boolean;
   search: (string: string) => Promise<void>;
@@ -25,50 +25,50 @@ interface ErrorObject {
 }
 
 export const useFetchSWAPI = (resource: SWResource): StateMethod => {
-  const [data, setData] = useState<SpeciesResponse | null>(null);
+  const [data, setData] = useState<SpeciesResponse>({
+    count: 0,
+    next: null,
+    previous: null,
+    results: null,
+  });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<ErrorObject | null>(null);
 
   const isMounted = useRef(true);
 
-  async function getData(url: string) {
-    return Axios.get(url);
-  }
-
-  async function search(string: string) {
-    try {
-      if (isMounted) {
-        setIsLoading(true);
-        const result = await getData(
-          `${BASE_API_URL}/${resource}/?search=${string}`
-        );
-
-        setData(result.data);
+  const withData = (url: any, cb: (resObj: SpeciesResponse) => void) => {
+    return async () => {
+      try {
+        if (url) {
+          setIsLoading(true);
+          const response = await Axios.get(url);
+          cb(response.data);
+          setIsLoading(false);
+        }
+      } catch (error) {
+        setError({ name: error.name, message: error.message });
         setIsLoading(false);
       }
-    } catch (error) {
-      setError({ name: error.name, message: error.message });
-      setIsLoading(false);
-    }
-  }
+    };
+  };
 
-  async function fetchMore(): Promise<void> {
-    try {
-      if (data?.next && isMounted) {
-        setIsLoading(true);
-        const nextPage = await getData(data.next);
-
-        setData({
-          ...nextPage.data,
-          results: [...data.results, ...nextPage.data.results],
-        });
-        setIsLoading(false);
+  const search = async (searchString: string) => {
+    await withData(
+      `${BASE_API_URL}/${resource}/?search=${searchString}`,
+      (searchResult) => {
+        setData(searchResult);
       }
-    } catch (error) {
-      setError({ name: error.name, message: error.message });
-      setIsLoading(false);
-    }
-  }
+    )();
+  };
+
+  const fetchMore = withData(data.next, (next) => {
+    setData((prev) => {
+      return {
+        ...next,
+        results: [...prev.results, ...next.results],
+      };
+    });
+  });
 
   useEffect(() => {
     return () => {
@@ -77,21 +77,15 @@ export const useFetchSWAPI = (resource: SWResource): StateMethod => {
   });
 
   useEffect(() => {
-    async function getSpecies() {
-      try {
-        const response = await getData(`${BASE_API_URL}/${resource}`);
-        if (isMounted.current) {
-          setData(response.data);
-          setIsLoading(false);
-        }
-      } catch (error) {
-        setError({ name: error.name, message: error.message });
-        setIsLoading(false);
+    const getSpecies = withData(`${BASE_API_URL}/${resource}/`, (res) => {
+      if (isMounted.current) {
+        setData(res);
       }
-    }
+    });
 
     getSpecies();
-  }, [resource]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return { data, fetchMore, isLoading, search, error };
 };
