@@ -40,8 +40,11 @@ export const useFetchSWAPI = (resource: SWResource): StateMethod => {
     return async () => {
       try {
         if (url) {
+          const httpsUrl = url.startsWith('https://')
+            ? url
+            : `https://${url.slice(7)}`;
           setIsLoading(true);
-          const response = await Axios.get(url);
+          const response = await Axios.get(httpsUrl);
           cb(response.data);
           setIsLoading(false);
         }
