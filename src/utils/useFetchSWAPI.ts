@@ -61,11 +61,11 @@ export const useFetchSWAPI = (resource: SWResource): StateMethod => {
     )();
   };
 
-  const fetchMore = withData(data.next, (next) => {
-    setData((prev) => {
+  const fetchMore = withData(data.next, (nextPage) => {
+    setData((prevPage) => {
       return {
-        ...next,
-        results: [...prev.results, ...next.results],
+        ...nextPage,
+        results: [...prevPage.results, ...nextPage.results],
       };
     });
   });
@@ -77,9 +77,9 @@ export const useFetchSWAPI = (resource: SWResource): StateMethod => {
   });
 
   useEffect(() => {
-    const getSpecies = withData(`${BASE_API_URL}/${resource}/`, (res) => {
+    const getSpecies = withData(`${BASE_API_URL}/${resource}/`, (response) => {
       if (isMounted.current) {
-        setData(res);
+        setData(response);
       }
     });
 

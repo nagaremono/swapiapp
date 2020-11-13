@@ -21,12 +21,12 @@ interface ListItemProps {
   species: Species;
 }
 
-interface DetailItemProps {
+interface ItemDetailProps {
   label: string;
   content: string;
 }
 
-const DetailItem: React.FC<DetailItemProps> = ({ label, content }) => {
+const ItemDetail: React.FC<ItemDetailProps> = ({ label, content }) => {
   return (
     <ListItem display="flex">
       <Text as="span" minW="25%">
@@ -75,18 +75,18 @@ export const SpeciesListItem: React.FC<ListItemProps> = ({
           </AccordionButton>
           <AccordionPanel>
             <List spacing={2}>
-              <DetailItem
+              <ItemDetail
                 label="Avg. Height: "
                 content={species.average_height + ' cm'}
               />
-              <DetailItem
+              <ItemDetail
                 label="Avg. Lifespan: "
                 content={species.average_lifespan + ' years'}
               />
-              <DetailItem label="Language: " content={species.language} />
-              <DetailItem label="Hair Colors: " content={species.hair_colors} />
-              <DetailItem label="Eye Color: " content={species.eye_colors} />
-              <DetailItem label="Skin Colors:" content={species.hair_colors} />
+              <ItemDetail label="Language: " content={species.language} />
+              <ItemDetail label="Hair Colors: " content={species.hair_colors} />
+              <ItemDetail label="Eye Color: " content={species.eye_colors} />
+              <ItemDetail label="Skin Colors:" content={species.hair_colors} />
             </List>
           </AccordionPanel>
         </AccordionItem>
