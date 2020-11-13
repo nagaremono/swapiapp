@@ -15,14 +15,14 @@ export const SpeciesList = () => {
 
   if (error && !isLoading) {
     message = (
-      <Alert status="error">
+      <Alert color="main.primary" status="error">
         <AlertIcon />
         {error?.message}
       </Alert>
     );
   } else if (data.results?.length === 0) {
     message = (
-      <Alert status="warning">
+      <Alert color="main.primary" status="warning">
         <AlertIcon />
         No such species
       </Alert>

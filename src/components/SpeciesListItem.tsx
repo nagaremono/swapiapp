@@ -13,6 +13,7 @@ import {
   ListItem,
   Tag,
   Text,
+  Wrap,
 } from '@chakra-ui/core';
 import React from 'react';
 import { Species } from '../types/species';
@@ -29,14 +30,16 @@ interface ItemDetailProps {
 const ItemDetail: React.FC<ItemDetailProps> = ({ label, content }) => {
   return (
     <ListItem display="flex">
-      <Text as="span" minW="25%">
+      <Text as="span" width="25%" minW="100px">
         {label}
       </Text>{' '}
-      {content.split(', ').map((c, i) => (
-        <Tag size="md" layerStyle="tags" mr={2} key={i}>
-          {c}
-        </Tag>
-      ))}
+      <Wrap>
+        {content.split(', ').map((c, i) => (
+          <Tag size="md" layerStyle="tags" mr={2} key={i}>
+            {c}
+          </Tag>
+        ))}
+      </Wrap>
     </ListItem>
   );
 };
@@ -48,8 +51,8 @@ export const SpeciesListItem: React.FC<ListItemProps> = ({
   return (
     <SimpleGrid
       alignItems="center"
-      columns={2}
-      spacingY={1}
+      columns={[1, 2]}
+      spacingY={[2, 1]}
       width="100%"
       key={species.name}
     >
