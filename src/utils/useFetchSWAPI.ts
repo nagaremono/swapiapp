@@ -87,8 +87,7 @@ export const useFetchSWAPI = (resource: SWResource): StateMethod => {
     });
 
     getSpecies();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [resource]);
 
   return { data, fetchMore, isLoading, search, error };
 };

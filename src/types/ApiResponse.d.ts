@@ -15,7 +15,7 @@ export interface ApiResponse {
   /**
    * URL to previous page
    */
-  previous: sstring | null;
+  previous: string | null;
   /**
    * Array of Species object
    */
