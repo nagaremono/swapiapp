@@ -1,5 +1,5 @@
 import Axios from 'axios';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { BASE_API_URL } from '../constants';
 import { ApiResponse } from '../types/ApiResponse';
 
@@ -73,6 +73,14 @@ export const useFetchSWAPI = (resource: SWResource): StateMethod => {
     });
   });
 
+  const getSpecies = useMemo(() => {
+    return withData(`${BASE_API_URL}/${resource}/`, (response) => {
+      if (isMounted.current) {
+        setData(response);
+      }
+    });
+  }, [resource]);
+
   useEffect(() => {
     return () => {
       isMounted.current = false;
@@ -80,14 +88,8 @@ export const useFetchSWAPI = (resource: SWResource): StateMethod => {
   });
 
   useEffect(() => {
-    const getSpecies = withData(`${BASE_API_URL}/${resource}/`, (response) => {
-      if (isMounted.current) {
-        setData(response);
-      }
-    });
-
     getSpecies();
-  }, [resource]);
+  }, [getSpecies]);
 
   return { data, fetchMore, isLoading, search, error };
 };
